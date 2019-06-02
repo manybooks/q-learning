@@ -5,6 +5,7 @@ import sys
 import time
 
 DEFAULT_EPISODE_NUM = 50000
+DEFAULT_Q_VALUE = 0.0
 
 if __name__ == "__main__":
     env = gym.make("Taxi-v2")
@@ -82,8 +83,10 @@ if __name__ == "__main__":
             # UNCOMMENT IT IF YOU WANT TO SEE OUR AGENT PLAYING
             # env.render()
             # Take the action (index) that have the maximum expected future reward given that state
-            action = np.argmax(qtable[state,:])
-            
+            action_with_largest_q_value = np.argmax(qtable[state,:])
+            largest_q_value = np.max(qtable[state,:])
+            action = action_with_largest_q_value if largest_q_value != DEFAULT_Q_VALUE else random.randint(0, env.action_space.n - 1)
+
             new_state, reward, done, info = env.step(action)
             
             total_rewards += reward
